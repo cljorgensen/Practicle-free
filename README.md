@@ -1,7 +1,7 @@
 # Practicle free version
 Welcome - this is the respository for the free release of Practicle
 
-Practicle - an ITIL-based web system for managing inquiries, orders, changes, projects, tasks, and much more.
+Practicle - an ITIL-based web system for managing inquiries, orders, changes, projects, tasks, cmdb and much more.
 
 Read this first
 
