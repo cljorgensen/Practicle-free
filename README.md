@@ -1,4 +1,4 @@
-# practicle-releases
+# Practicle free version
 Free releases of Practicle
 
 Read this first
