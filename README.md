@@ -29,7 +29,9 @@ Installation guide
 4. run ./installPracticle.sh
 5. state path to the web folder you want to install to ex. /var/www/html/practicle
 6. follow instrunctions and answer mysql installation setup questions
-7. install certifiate
-8. add ssl configuration to the genereated apache config file
-9. go to website and run https://systemname.domain.dk/install.php file (requires that you have made an mysql admin account)
-10. now your practicle site should run successfully
+7. go to web files script folder (/var/www/html/practicle/scripts/)
+8. run ./setFilePermissions.sh
+9. install certifiate
+10. add ssl configuration to the genereated apache config file
+11. go to website and run https://systemname.domain.dk/install.php file (requires that you have made an mysql admin account)
+12. now your practicle site should run successfully
