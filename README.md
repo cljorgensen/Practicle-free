@@ -24,10 +24,10 @@ Your informations provided in this installer will be registered. Please keep use
 
 Installation guide
 
-1. Install Ubuntu 24.04
+1. install Ubuntu 24.04 (installation script will install all necessary requirements
 2. go to user home folder
-3. copy/paste installPracticle.sh and make file executable
-4. ./installPracticle.sh
+3. copy/paste installPracticle.sh and make the file executable
+4. run ./installPracticle.sh
 5. state path to the web folder you want to install to ex. /var/www/html/practicle
 6. follow instrunctions and answer mysql installation setup questions
 7. install certifiate
