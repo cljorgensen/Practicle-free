@@ -22,7 +22,7 @@ Your informations provided in this installer will be registered. Please keep use
 * If you are using our software on daily basis - please provide us with a recommendation here LinkedIn and here Facebook
 * Yes, Practicle is a hobby project. While it may gain commercial traction in the future, please use it at your own risk.
 
-Installation
+Installation guide
 
 1. Install Ubuntu 24.04
 2. go to user home folder
