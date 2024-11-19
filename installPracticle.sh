@@ -154,9 +154,136 @@ EOL
     echo "Apache configuration for ${SITE_NAME} created and enabled."
 }
 
+create_mysql_admin() {
+    # Variables
+    MYSQL_USER="mysql-pracadm"
+    PASSWORD=$(openssl rand -base64 24 | tr -dc 'a-zA-Z0-9!@#$%^&*()-_' | head -c 16)
+    MYSQL_ROOT_PASSWORD="<your-root-password>" # Replace with your actual MySQL root password
+    PASSWORD_FILE="./mysql_pracadm_credentials.txt"
+
+    # Check if MySQL is running
+    if ! systemctl is-active --quiet mysql; then
+        echo "Error: MySQL service is not running."
+        return 1
+    fi
+
+    # Run MySQL commands to create user
+    echo "Creating MySQL admin user '$MYSQL_USER'..."
+    mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "
+    CREATE USER '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${PASSWORD}';
+    GRANT ALL PRIVILEGES ON *.* TO '${MYSQL_USER}'@'localhost' WITH GRANT OPTION;
+    FLUSH PRIVILEGES;
+    "
+    sudo mysql_tzinfo_to_sql /usr/share/zoneinfo | sudo mysql -u$MYSQL_USER -p$PASSWORD mysql
+    sudo systemctl restart mysql.service
+
+    # Store credentials securely
+    echo "MySQL Admin User: $MYSQL_USER" > "$PASSWORD_FILE"
+    echo "Password: $PASSWORD" >> "$PASSWORD_FILE"
+    chmod 600 "$PASSWORD_FILE"
+
+    echo "MySQL admin user created successfully."
+    echo "Credentials have been saved to $PASSWORD_FILE."
+
+}
+
+set_project_permissions() {
+    WEB_PROJECT_PATH=$1
+
+    WEB_USER="www-data"
+
+    # Define paths relative to the web project root directory
+    PROJECT_DIR=$WEB_PROJECT_PATH
+    SCRIPTS_DIR="$WEB_PROJECT_PATH/scripts"
+    BACKUPS_DIR="$WEB_PROJECT_PATH/backups/dbs"
+    UPLOADS_DIR="$WEB_PROJECT_PATH/uploads"
+    LOCALES_DIR="$WEB_PROJECT_PATH/locales"
+
+    # Change ownership of all files and directories to $WEB_USER
+    echo "Changing ownership of all files and directories in $PROJECT_DIR to $WEB_USER..."
+    if [ -d "$PROJECT_DIR" ]; then
+        chown -R "$WEB_USER:$WEB_USER" "$PROJECT_DIR"
+        echo "Ownership of $PROJECT_DIR set to $WEB_USER."
+    else
+        echo "Project directory $PROJECT_DIR does not exist."
+    fi
+
+    # Set all files and folders to 775
+    echo "Setting permissions for $PROJECT_DIR to 775..."
+    if [ -d "$PROJECT_DIR" ]; then
+        chmod -R 775 "$PROJECT_DIR"
+        echo "Permissions for $PROJECT_DIR set to 775."
+    else
+        echo "Directory $PROJECT_DIR does not exist."
+    fi
+
+    # Set all other directories in the project to 775, excluding $SCRIPTS_DIR
+    echo "Setting all directories in $PROJECT_DIR to 775, excluding $SCRIPTS_DIR..."
+    if [ -d "$PROJECT_DIR" ]; then
+        find "$PROJECT_DIR" -type d -name "$(basename "$SCRIPTS_DIR")" -prune -o -type d -exec chmod 775 {} +
+        echo "All directories in $PROJECT_DIR set to 775, excluding $SCRIPTS_DIR."
+    else
+        echo "Project directory $PROJECT_DIR does not exist."
+    fi
+
+    # Set all other files in the project to 664, excluding $SCRIPTS_DIR
+    echo "Setting all files in $PROJECT_DIR to 664, excluding $SCRIPTS_DIR..."
+    if [ -d "$PROJECT_DIR" ]; then
+        find "$PROJECT_DIR" -type f -not -path "$SCRIPTS_DIR/*" -print0 | xargs -0 chmod 664
+        echo "All files in $PROJECT_DIR set to 664, excluding $SCRIPTS_DIR."
+    else
+        echo "Project directory $PROJECT_DIR does not exist."
+    fi
+
+    # Set /backups/dbs directory to 775
+    echo "Setting permissions for $BACKUPS_DIR to 775..."
+    if [ -d "$BACKUPS_DIR" ]; then
+        chmod 775 "$BACKUPS_DIR"
+        echo "Permissions for $BACKUPS_DIR set to 775."
+    else
+        echo "Directory $BACKUPS_DIR does not exist."
+    fi
+
+    # Set /uploads/ and its subdirectories to 775 (to allow uploads)
+    echo "Setting permissions for $UPLOADS_DIR and its subdirectories to 775..."
+    if [ -d "$UPLOADS_DIR" ]; then
+        chmod -R 775 "$UPLOADS_DIR"
+        chown -R "$WEB_USER:$WEB_USER" "$UPLOADS_DIR"
+        echo "Permissions for $UPLOADS_DIR set to 775, with write access for $WEB_USER."
+    else
+        echo "Directory $UPLOADS_DIR does not exist."
+    fi
+
+    # Set /locales/ and its subdirectories to 775
+    echo "Setting permissions for $LOCALES_DIR and its subdirectories to 775..."
+    if [ -d "$LOCALES_DIR" ]; then
+        chmod -R 775 "$LOCALES_DIR"
+        echo "Permissions for $LOCALES_DIR set to 775."
+    else
+        echo "Directory $LOCALES_DIR does not exist."
+    fi
+
+    # Set /scripts directory to 775
+    echo "Setting permissions for $SCRIPTS_DIR to 775..."
+    if [ -d "$SCRIPTS_DIR" ]; then
+        chmod 775 "$SCRIPTS_DIR"
+        echo "Permissions for $SCRIPTS_DIR set to 775."
+    else
+        echo "Directory $SCRIPTS_DIR does not exist."
+    fi
+
+    LOG_FILE="${PROJECT_DIR}/installation.log"
+    touch "$LOG_FILE"
+    chmod 777 "$LOG_FILE"
+
+    echo "Permission setting completed."
+}
+
 # Prompt for the web project path with a default value
 read -p "Enter the full path to your web project (e.g., /var/www/html/practicle) [default: /var/www/html/practicle]: " WEB_PROJECT_PATH
 WEB_PROJECT_PATH=${WEB_PROJECT_PATH:-/var/www/html/practicle}
+
+sudo timedatectl set-timezone Europe/Copenhagen
 
 # Install Apache web server
 echo "Installing Apache web server..."
@@ -218,3 +345,7 @@ create_service "$WEB_PROJECT_PATH"
 
 # Call the function to create the Apache configuration
 create_apache_config
+
+set_project_permissions "$WEB_PROJECT_PATH"
+
+create_mysql_admin
