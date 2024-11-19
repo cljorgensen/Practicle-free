@@ -2,7 +2,6 @@
 Welcome - this is the respository for the free release of Practicle
 
 Read this first
-By clicking “Install,” you agree to these terms:
 
 This software is provided free of charge and without built in limitations. You are not allowed to sell this software, modify it, or misuse it in any way. Use of this software is at your own discretion, and Practicle is not liable for any data loss or errors arising from its use. We do not have or provide any support for this free version.
 
