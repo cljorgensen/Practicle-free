@@ -8,7 +8,8 @@ set -e
 
 # Function to install PHP extension
 install_php_extension() {
-    EXTENSION_PATH="../inc/practiclefunctions.so"
+    WEB_PROJECT_PATH=$1
+    EXTENSION_PATH="$WEB_PROJECT_PATH/inc/practiclefunctions.so"
     PHP_VERSION=$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')
     PHP_EXT_DIR=$(php -i | grep "^extension_dir" | awk '{print $3}')
 
@@ -198,13 +199,13 @@ echo "Installed prerequisites."
 # Download latest release of Practicle
 echo "Downloading and installing Practicle..."
 mkdir -p $WEB_PROJECT_PATH # Added -p to prevent errors if the directory already exists
-wget -O $WEB_PROJECT_PATH/${version}.tar.gz https://support.practicle.dk/backups/releases/hekx85klqcs5yhw7vfw5mq9sak0g/Practiclev3-${version}.tar.gz
+wget -O $WEB_PROJECT_PATH/${version}.tar.gz https://support.practicle.dk/backups/releases/hekx85klqcs5yhw7vfw5mq9sak0g/practicle_release_${version}.tar.gz
 tar -xvf $WEB_PROJECT_PATH/${version}.tar.gz -C $WEB_PROJECT_PATH --strip-components=1 # Added --strip-components to extract directly into the directory
 rm $WEB_PROJECT_PATH/${version}.tar.gz
 echo "Downloaded Practicle."
 
 # Call the function to install the PHP extension
-install_php_extension
+install_php_extension "$WEB_PROJECT_PATH"
 
 # Call the function to create the service
 create_service "$WEB_PROJECT_PATH"
