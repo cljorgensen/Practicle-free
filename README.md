@@ -1,5 +1,5 @@
 # Practicle free version
-Free releases of Practicle
+Welcome - this is the respository for the free release of Practicle
 
 Read this first
 By clicking “Install,” you agree to these terms:
