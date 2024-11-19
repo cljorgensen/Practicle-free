@@ -39,16 +39,22 @@ install_php_extension() {
         fi
     done
 
+    # Verify the extension is loaded
+    echo "Verifying the extension is loaded in CLI..."
+    php -m | grep practiclefunctions && echo "Extension loaded successfully in CLI." || echo "Error: Extension not loaded in CLI."
+
+    sudo apt install php-imap -y
+    sudo apt install php-curl -y
+    sudo apt install php-gd -y
+    sudo apt install php-mbstring -y
+    sudo apt install php-zip -y
+
     # Reload Apache2 and FPM (if installed) to apply the extension
     echo "Reloading services..."
     sudo systemctl reload apache2
     if command -v php-fpm > /dev/null; then
         sudo systemctl reload php$PHP_VERSION-fpm
     fi
-
-    # Verify the extension is loaded
-    echo "Verifying the extension is loaded in CLI..."
-    php -m | grep practiclefunctions && echo "Extension loaded successfully in CLI." || echo "Error: Extension not loaded in CLI."
 }
 
 # Function to create systemd service
