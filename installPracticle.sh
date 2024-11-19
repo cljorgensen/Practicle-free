@@ -332,7 +332,7 @@ echo "Installed prerequisites."
 # Download latest release of Practicle
 echo "Downloading and installing Practicle..."
 mkdir -p $WEB_PROJECT_PATH # Added -p to prevent errors if the directory already exists
-wget -O $WEB_PROJECT_PATH/${version}.tar.gz https://support.practicle.dk/backups/releases/hekx85klqcs5yhw7vfw5mq9sak0g/practicle_release_${version}.tar.gz
+wget -O $WEB_PROJECT_PATH/${version}.tar.gz cominsSoon/practicle_release_${version}.tar.gz
 tar -xvf $WEB_PROJECT_PATH/${version}.tar.gz -C $WEB_PROJECT_PATH --strip-components=1 # Added --strip-components to extract directly into the directory
 rm $WEB_PROJECT_PATH/${version}.tar.gz
 echo "Downloaded Practicle."
