@@ -31,5 +31,5 @@ Installation guide
 6. follow instrunctions and answer mysql installation setup questions
 7. install certifiate
 8. add ssl configuration to the genereated apache config file
-9. go to website and run /install.php file
+9. go to website and run https://systemname.domain.dk/install.php file (requires that you have made an mysql admin account)
 10. now your practicle site should run successfully
