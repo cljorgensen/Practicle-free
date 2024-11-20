@@ -35,5 +35,5 @@ Installation guide
 8. run ./setFilePermissions.sh
 9. install certifiate
 10. add ssl configuration to the genereated apache config file
-11. go to website and run https://systemname.domain.dk/install.php file (requires that you have made an mysql admin account)
+11. go to website and run https://systemname.domain.dk/install.php file
 12. now your practicle site should run successfully
