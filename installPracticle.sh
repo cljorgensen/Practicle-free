@@ -1,13 +1,28 @@
 #!/bin/bash
-# Practicle Install Script: v.1.0.0 (2024-11-19)
 
-# Exit immediately if a command exits with a non-zero status.
-version="3.93.111"
+# Practicle Installation Script with Dry-Run and PHP 8.3 FPM Configuration
 
-set -e
+DRY_RUN=false
+PHP_VERSION="8.3"
+FPM_POOL_CONF="/etc/php/$PHP_VERSION/fpm/pool.d/www.conf"
+WEB_PROJECT_PATH="/var/www/html/practicle"
+VERSION="3.93.112" # Replace with the desired Practicle release version
 
-# Function to install PHP extension
-install_php_extension() {
+function run_command() {
+    local command=$1
+    if [ "$DRY_RUN" = true ]; then
+        echo "[DRY-RUN] $command"
+    else
+        eval "$command"
+    fi
+}
+
+function print_usage() {
+    echo "Usage: $0 [--dry-run]"
+    echo "  --dry-run    Preview commands without executing them"
+}
+
+install_php_extensions() {
     WEB_PROJECT_PATH=$1
     EXTENSION_PATH="$WEB_PROJECT_PATH/inc/practiclefunctions.so"
     PHP_VERSION=$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')
@@ -27,7 +42,6 @@ install_php_extension() {
     # Add configuration files for CLI, Apache2, and FPM
     CONF_PATHS=(
         "/etc/php/$PHP_VERSION/cli/conf.d"
-        "/etc/php/$PHP_VERSION/apache2/conf.d"
         "/etc/php/$PHP_VERSION/fpm/conf.d"
     )
 
@@ -55,103 +69,6 @@ install_php_extension() {
     if command -v php-fpm > /dev/null; then
         sudo systemctl reload php$PHP_VERSION-fpm
     fi
-}
-
-# Function to create systemd service
-create_service() {
-    WEB_PROJECT_PATH=$1
-    SERVICE_NAME="practicle-service"
-
-    # Define the full path to the jobengine.php file
-    PHP_FILE="$WEB_PROJECT_PATH/watchers/jobengine.php"
-
-    # Check if the PHP file exists
-    if [ ! -f "$PHP_FILE" ];then
-        echo "Error: $PHP_FILE does not exist."
-        exit 1
-    fi
-
-    # Create a systemd service file
-    SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
-
-    echo "Creating systemd service file at $SERVICE_FILE..."
-
-    sudo tee "$SERVICE_FILE" > /dev/null <<EOL
-[Unit]
-Description=Job Engine PHP Service
-After=network.target
-
-[Service]
-ExecStart=/usr/bin/php $PHP_FILE
-Restart=always
-User=www-data
-Group=www-data
-
-[Install]
-WantedBy=multi-user.target
-EOL
-
-    # Create the systemd timer file
-    TIMER_FILE="/etc/systemd/system/${SERVICE_NAME}.timer"
-
-    echo "Creating systemd timer file at $TIMER_FILE..."
-
-    sudo tee "$TIMER_FILE" > /dev/null <<EOL
-[Unit]
-Description=Run Job Engine PHP Service every 10 seconds
-
-[Timer]
-OnBootSec=10
-OnUnitActiveSec=10
-Unit=${SERVICE_NAME}.service
-
-[Install]
-WantedBy=timers.target
-EOL
-
-    # Reload systemd and enable the timer
-    echo "Reloading systemd daemon..."
-    sudo systemctl daemon-reload
-
-    echo "Enabling and starting the service and timer..."
-    sudo systemctl enable ${SERVICE_NAME}.timer
-    sudo systemctl start ${SERVICE_NAME}.timer
-
-    echo "Job engine service and timer created successfully!"
-    echo "Service: $SERVICE_NAME"
-    echo "Timer: $SERVICE_NAME.timer"
-    echo "Job file: $PHP_FILE"
-    systemctl enable $SERVICE_NAME.service
-}
-
-# Function to create Apache configuration
-create_apache_config() {
-    echo "Enabling rewrite mod..."
-    sudo a2enmod rewrite
-
-    SITE_NAME="practicle"
-    APACHE_CONFIG_FILE="/etc/apache2/sites-available/${SITE_NAME}.conf"
-
-    echo "Creating Apache configuration file at $APACHE_CONFIG_FILE..."
-
-    sudo tee "$APACHE_CONFIG_FILE" > /dev/null <<EOL
-<VirtualHost *:80>
-    ServerName ${SITE_NAME}.dk
-    DocumentRoot $WEB_PROJECT_PATH/
-    Redirect permanent / https://${SITE_NAME}.dk
-    RewriteEngine on
-    RewriteCond %{SERVER_NAME} =${SITE_NAME}.dk
-    RewriteRule ^ https://${SITE_NAME}.dk%{REQUEST_URI} [END,NE,R=permanent]
-</VirtualHost>
-EOL
-
-    echo "Enabling site ${SITE_NAME}..."
-    sudo a2ensite ${SITE_NAME}
-
-    echo "Reloading Apache..."
-    sudo systemctl reload apache2
-
-    echo "Apache configuration for ${SITE_NAME} created and enabled."
 }
 
 create_mysql_admin() {
@@ -279,73 +196,94 @@ set_project_permissions() {
     echo "Permission setting completed."
 }
 
-# Prompt for the web project path with a default value
-read -p "Enter the full path to your web project (e.g., /var/www/html/practicle) [default: /var/www/html/practicle]: " WEB_PROJECT_PATH
-WEB_PROJECT_PATH=${WEB_PROJECT_PATH:-/var/www/html/practicle}
+# Parse arguments
+for arg in "$@"; do
+    case $arg in
+    --dry-run)
+        DRY_RUN=true
+        shift
+        ;;
+    *)
+        print_usage
+        exit 1
+        ;;
+    esac
+done
 
-sudo timedatectl set-timezone Europe/Copenhagen
+# Step 1: Update system packages
+run_command "apt update && apt upgrade -y"
 
-# Install Apache web server
-echo "Installing Apache web server..."
-sudo apt update # Added to ensure package lists are up-to-date
-sudo apt install -y apache2
-
-# Start Apache and enable it to run on boot
-echo "Starting Apache service..."
-sudo systemctl start apache2
-sudo systemctl enable apache2
-
-sudo apt install -y libapache2-mod-php
-sudo systemctl restart apache2
-
-# Install MySQL server
-echo "Installing MySQL server..."
-sudo apt install -y mysql-server
-
-# Secure MySQL installation (optional)
-echo "Securing MySQL installation..."
-sudo mysql_secure_installation
-
-# Start MySQL and enable it to run on boot
-echo "Starting MySQL service..."
-sudo systemctl start mysql
-sudo systemctl enable mysql
+# Step 2: Install necessary packages
+run_command "apt install -y mysql-server apache2 php$PHP_VERSION php$PHP_VERSION-fpm php$PHP_VERSION-mysql wget tar php-cli php$PHP_VERSION-common git php$PHP_VERSION-dev re2c gcc make autoconf"
 
 echo "Installing prerequisites..."
-sudo apt install -y php php-mysql php-cli php-common
-sudo apt install -y git php php-dev re2c gcc make autoconf
-sudo locale-gen da_DK.UTF-8
-sudo locale-gen de_DE.UTF-8
-sudo locale-gen es_ES.UTF-8
-sudo locale-gen fr_FR.UTF-8
-sudo locale-gen fi_FI.UTF-8
-sudo locale-gen it_IT.UTF-8
-sudo locale-gen tr_TR.UTF-8
-sudo locale-gen zh_CN.UTF-8
-sudo locale-gen zh_TW.UTF-8
-sudo locale-gen ru_RU.UTF-8
-sudo locale-gen ja_JP.UTF-8
-sudo locale-gen pt_PT.UTF-8
-sudo update-locale
+run_command locale-gen da_DK.UTF-8
+run_command locale-gen de_DE.UTF-8
+run_command locale-gen es_ES.UTF-8
+run_command locale-gen fr_FR.UTF-8
+run_command locale-gen fi_FI.UTF-8
+run_command locale-gen it_IT.UTF-8
+run_command locale-gen tr_TR.UTF-8
+run_command locale-gen zh_CN.UTF-8
+run_command locale-gen zh_TW.UTF-8
+run_command locale-gen ru_RU.UTF-8
+run_command locale-gen ja_JP.UTF-8
+run_command locale-gen pt_PT.UTF-8
+run_command update-locale
 echo "Installed prerequisites."
 
-# Download latest release of Practicle
-echo "Downloading and installing Practicle..."
-mkdir -p $WEB_PROJECT_PATH # Added -p to prevent errors if the directory already exists
-wget -O $WEB_PROJECT_PATH/${version}.tar.gz cominsSoon/practicle_release_${version}.tar.gz
-tar -xvf $WEB_PROJECT_PATH/${version}.tar.gz -C $WEB_PROJECT_PATH --strip-components=1 # Added --strip-components to extract directly into the directory
-rm $WEB_PROJECT_PATH/${version}.tar.gz
-echo "Downloaded Practicle."
+# Step 3: Enable Apache modules and PHP-FPM
+run_command "a2enmod proxy_fcgi setenvif"
+run_command "a2enconf php$PHP_VERSION-fpm"
 
-# Call the function to install the PHP extension
-install_php_extension "$WEB_PROJECT_PATH"
+# Step 4: Set up PHP-FPM pool configuration
+run_command "sed -i 's/^listen = .*/listen = \/run\/php\/php$PHP_VERSION-fpm.sock/' $FPM_POOL_CONF"
+run_command "systemctl restart php$PHP_VERSION-fpm"
 
-# Call the function to create the service
-create_service "$WEB_PROJECT_PATH"
+# Step 5: Create Apache VirtualHost
+APACHE_CONF="/etc/apache2/sites-available/practicle.conf"
+run_command "cat <<EOL >$APACHE_CONF
+<VirtualHost *:80>
+    ServerName practicle.local
+    DocumentRoot $WEB_PROJECT_PATH
 
-# Call the function to create the Apache configuration
-create_apache_config
+    <Directory $WEB_PROJECT_PATH>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
 
+    <FilesMatch \".+\.php$\">
+        SetHandler \"proxy:unix:/run/php/php$PHP_VERSION-fpm.sock|fcgi://localhost/\"
+    </FilesMatch>
+
+    ErrorLog \${APACHE_LOG_DIR}/error.log
+    CustomLog \${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+EOL"
+
+run_command "a2ensite practicle.conf"
+echo "Starting apache2 service..."
+run_command "systemctl restart apache2"
+echo "Starting MySQL service..."
+run_command "systemctl start mysql"
+run_command "systemctl enable mysql"
+
+# Step 6: Download and extract Practicle release
+run_command "mkdir -p $WEB_PROJECT_PATH"
+run_command "wget -O $WEB_PROJECT_PATH/${VERSION}.tar.gz https://downloads.practicle.dk/practicle_release_${VERSION}.tar.gz"
+run_command "tar -xvf $WEB_PROJECT_PATH/${VERSION}.tar.gz -C $WEB_PROJECT_PATH --strip-components=1"
+run_command "rm $WEB_PROJECT_PATH/${VERSION}.tar.gz"
+
+install_php_extensions "$WEB_PROJECT_PATH"
 set_project_permissions "$WEB_PROJECT_PATH"
-
 create_mysql_admin
+
+run_command "systemctl restart php8.3-fpm.service"
+
+# Final message
+if [ "$DRY_RUN" = true ]; then
+    echo "Dry-run completed. No changes were made."
+else
+    echo "Installation completed successfully. Visit http://practicle.local/practicle/install.php in your browser."
+fi
