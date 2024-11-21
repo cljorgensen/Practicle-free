@@ -1,7 +1,7 @@
 # Practicle free version
 Welcome - this is the respository for the free release of Practicle
 
-Practicle - an ITIL-based web system for managing inquiries, orders, changes, projects, tasks, cmdb and much more.
+Practicle is an ITIL-based web system for managing inquiries, orders, changes, projects, tasks, cmdb and much more.
 
 Read this first
 
@@ -30,10 +30,7 @@ Installation guide
 3. copy/paste installPracticle.sh and make the file executable
 4. run ./installPracticle.sh
 5. state path to the web folder you want to install to ex. /var/www/html/practicle
-6. follow instrunctions and answer mysql installation setup questions
-7. go to web files script folder (/var/www/html/practicle/scripts/)
-8. run ./setFilePermissions.sh
-9. install certifiate
-10. add ssl configuration to the genereated apache config file
-11. go to website and run https://systemname.domain.dk/install.php file
-12. now your practicle site should run successfully
+6. install certifiate for https
+7. add ssl configuration to the genereated apache config file
+8. go to website and run https://systemname.domain.dk/install.php file
+9. now your practicle site should run successfully and you can login with your provided credentials
