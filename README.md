@@ -29,8 +29,9 @@ Installation guide
 2. go to user home folder
 3. copy/paste installPracticle.sh and make the file executable
 4. run ./installPracticle.sh
-5. state path to the web folder you want to install to ex. /var/www/html/practicle
-6. install certifiate for https
+5. installer will automatically install local mysql server, create admin user and install web files in /var/www/html/practicle
+6. install certifiate for https (practicle installs with use of php-fpm)
 7. add ssl configuration to the genereated apache config file
-8. go to website and run https://systemname.domain.dk/install.php file
-9. now your practicle site should run successfully and you can login with your provided credentials
+8. go to website and run https://systemname.local/install.php file
+9. practicle will setup database and more, please note the user credentials the installer provides
+10. If run successfully delete /var/www/html/practicle/install.php file and you can login with your provided credentials
