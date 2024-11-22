@@ -28,10 +28,11 @@ Installation guide
 1. install Ubuntu 24.04 (installation script will install all necessary requirements
 2. go to user home folder
 3. wget https://downloads.practicle.dk/installPracticle.sh .
-4. run ./installPracticle.sh
-5. installer will automatically install local mysql server, create admin user and install web files in /var/www/html/practicle
-6. install certifiate for https (practicle installs with use of php-fpm)
-7. add ssl configuration to the genereated apache config file
-8. go to website and run https://systemname.local/install.php file
-9. practicle will setup database and more, please note the user credentials the installer provides
-10. If run successfully delete /var/www/html/practicle/install.php file and you can login with your provided credentials
+4. chmod +x installPracticle.sh
+5. run ./installPracticle.sh
+6. installer will automatically install local mysql server, create admin user and install web files in /var/www/html/practicle
+7. install certifiate for https (practicle installs with use of php-fpm)
+8. add ssl configuration to the genereated apache config file
+9. go to website and run https://systemname.local/install.php file
+10. practicle will setup database and more, please note the user credentials the installer provides
+11. If run successfully delete /var/www/html/practicle/install.php file and you can login with your provided credentials
