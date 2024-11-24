@@ -20,9 +20,9 @@ To enhance our software and better understand user needs, practicle will regular
 
 Your informations provided in this installer will be registered. Please keep user information anonymous if you prefer that. No further personal or sensitive information is collected, transmitted or registered.
 
-* If you are interested in participating in this project, have reports on security issues or have requests for features (hourly fee of 200 dollars per hour) - please contact Practicle via our contact form here
+* If you are interested in participating in this project and make up some of the messy code, if you have reports on security issues or have requests for features (hourly fee of 200 dollars per hour) - please contact Practicle via our contact form here
 * If you are using our software on daily basis - please provide us with a recommendation here LinkedIn and here Facebook
-* Yes, Practicle is a hobby project. While it may gain commercial traction in the future, please use it at your own risk.
+* Yes, Practicle is a hobby project. While it may gain commercial traction in the future, please use it at your own risk, we recommend you to use the software internally behind firewall.
 
 Installation guide
 
