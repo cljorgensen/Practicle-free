@@ -9,14 +9,15 @@ This software is provided free of charge and without built in limitations. You a
 
 To enhance our software and better understand user needs, practicle will regularly transmit the following statistics:
 
-Number of active users
-Number of active companies
-Number of active teams
-Number of active groups
-Number of active elements
-Number of active projects
-Number of active assets types (cmdb)
-Number of active assets (cmdb)
+- Number of active users
+- Number of active companies
+- Number of active teams
+- Number of active groups
+- Number of active elements
+- Number of active projects
+- Number of active assets types (cmdb)
+- Number of active assets (cmdb)
+
 Your informations provided in this installer will be registered. Please keep user information anonymous if you prefer that. No further personal or sensitive information is collected, transmitted or registered.
 
 * If you are interested in participating in this project, have reports on security issues or have requests for features (hourly fee of 200 dollars per hour) - please contact Practicle via our contact form here
