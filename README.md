@@ -21,7 +21,7 @@ To enhance our software and better understand user needs, practicle will regular
 
 Your informations provided in this installer will be registered. Please keep user information anonymous if you prefer that. No further personal or sensitive information is collected, transmitted or registered.
 
-A Personal Note
+A Personal Note:
 I have realized that this project is too large for one person to handle alone. Therefore:
 
 Looking for Collaborators
