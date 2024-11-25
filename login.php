@@ -10,6 +10,18 @@ header("Pragma: no-cache");
 //header("Content-Security-Policy: default-src 'self';script-src 'self'");
 header("X-XSS-Protection: '1; mode=block'");
 header("X-Content-Type-Options: 'nosniff'");
+
+session_set_cookie_params([
+  "lifetime" => 0, // 0 means "until the browser is closed"
+  "path" => "/",
+  "domain" => "$domain", // Set to your domain if needed
+  "secure" => true, // Ensure the cookie is sent over HTTPS only
+  "httponly" => true, // Make the cookie inaccessible to JavaScript
+  "samesite" => "Strict" // Optional: Prevent the cookie from being sent with cross-site requests
+]);
+
+session_start();
+
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
   $cookie_name = "practicle_visited_url";
@@ -27,24 +39,13 @@ require_once "./functions/functions.php";
 include_once "./locales/i18n_setup.php";
 
 // debug error level: low, medium, high
-@$functions->setDebugging("low");
-
-session_start();
+$functions->setDebugging("low");
 
 if (empty($_SESSION['csrf_token'])) {
   $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); // Secure CSRF token
 }
 
 $domain = $_SERVER['HTTP_HOST'];
-
-session_set_cookie_params([
-  "lifetime" => 0, // 0 means "until the browser is closed"
-  "path" => "/",
-  "domain" => "$domain", // Set to your domain if needed
-  "secure" => true, // Ensure the cookie is sent over HTTPS only
-  "httponly" => true, // Make the cookie inaccessible to JavaScript
-  "samesite" => "Strict" // Optional: Prevent the cookie from being sent with cross-site requests
-]);
 
 $csrf_token = $_SESSION['csrf_token'];
 ?>

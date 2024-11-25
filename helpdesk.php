@@ -236,7 +236,6 @@ $CompanyID = $_SESSION['companyid'];
                     <table id="TableRequestsViewHD" class="table table-borderless dt-responsive table-hover" cellspacing="0">
                     </table>
                     <form id="ITSMFormCreateHelpDesk"></form>
-                    <form id="RequestDefinitionHelpDesk"></form>
                     <button type="button" class="btn btn-sm btn-success" onclick="createRequest()"><?php echo _("Create") ?></button>
                     <div id="FormIDHelpDesk" hidden></div>
                     <div id="FormNameHelpDesk" hidden></div>
@@ -398,12 +397,13 @@ $CompanyID = $_SESSION['companyid'];
 
   async function createRequest() {
     var ITSMTableName = "itsm_requests";
+    var ITSMForm = [];
+    var RequestForm = [];
     var RequestForm = $("#ITSMFormCreateHelpDesk").serializeArray();
     var FormID = document.getElementById("FormIDHelpDesk").innerHTML;
     var RelatedCompanyID = <?php echo $CompanyID ?>;
     var Customer = <?php echo $UserID ?>;
     var Subject = document.getElementById("FormNameHelpDesk").innerHTML;
-    var ITSMForm = [];
 
     ITSMForm.push({
       name: 'RelatedCompanyID',
@@ -425,6 +425,7 @@ $CompanyID = $_SESSION['companyid'];
       name: 'Priority',
       value: '3'
     });
+
 
     createITSMEntry(ITSMTableName, ITSMForm, FormID, RequestForm);
     await new Promise(resolve => setTimeout(resolve, 1000));

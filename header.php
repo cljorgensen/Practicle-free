@@ -1,7 +1,4 @@
 <?php
-// Start the session
-session_start();
-
 // PHP configuration settings
 $postMaxSize = '200M';
 $uploadMaxSize = '200M';
@@ -30,7 +27,8 @@ $session_timeout_seconds = $session_timeout * 60; // Convert to seconds
 
 // Set the session GC max lifetime (in case session is stored in server-side session handler)
 ini_set('session.gc_maxlifetime', $session_timeout_seconds);
-
+// Start the session
+session_start();
 // Check if the session has expired (based on last activity time)
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout_seconds) {
   // Redirect to logout page

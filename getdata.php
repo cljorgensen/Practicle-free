@@ -13874,7 +13874,7 @@ if (isset($_GET['getRequestDefinition'])) {
           ORDER BY Forms_fieldslist.FieldOrder ASC";
 
   $stmt = mysqli_prepare($conn, $sql);
-  $stmt->bind_param("s", $FormID);
+  $stmt->bind_param("i", $FormID);
   $stmt->execute();
   $result = $stmt->get_result();
 
