@@ -1,9 +1,10 @@
 # Practicle free version
-Welcome - this is the respository for the free release of Practicle
 
-Practicle is an ITIL-based web system for managing inquiries, orders, changes, projects, tasks, cmdb and much more.
+Welcome! This is the repository for the free release of Practicle.
 
-Read this first
+Practicle is an ITIL-based web system designed for managing inquiries, orders, changes, projects, tasks, CMDB (Configuration Management Database), and much more.
+
+#Read this first
 
 This software is provided free of charge and without built in limitations. You are not allowed to sell this software, modify it, or misuse it in any way. Use of this software is at your own discretion, and Practicle is not liable for any data loss or errors arising from its use. We do not have or provide any support for this free version.
 
@@ -20,9 +21,19 @@ To enhance our software and better understand user needs, practicle will regular
 
 Your informations provided in this installer will be registered. Please keep user information anonymous if you prefer that. No further personal or sensitive information is collected, transmitted or registered.
 
-* If you are interested in participating in this project and make up some of the messy code, if you have reports on security issues or have requests for features (hourly fee of 200 dollars per hour) - please contact Practicle via our contact form here
-* If you are using our software on daily basis - please provide us with a recommendation here LinkedIn and here Facebook
-* Yes, Practicle is a hobby project. While it may gain commercial traction in the future, please use it at your own risk, we recommend you to use the software internally behind firewall.
+#A Personal Note
+I have realized that this project is too large for one person to handle alone. Therefore:
+
+#Looking for Collaborators
+If you're interested in contributing to this project, partnering up, or reporting security issues, please don’t hesitate to contact me.
+#Show Your Support
+If you use Practicle regularly, I’d greatly appreciate a recommendation on LinkedIn or Facebook.
+Hobby Project Warning: Practicle is a hobby project and may gain commercial traction in the future. Please use it at your own risk. We recommend running this software on a local network.
+Bug Reports and Feature Requests
+If you encounter a bug or have a feature request, please contact me through the contact form on www.practicle.dk or email me at claus@practicle.dk. Include:
+
+Screenshots of the error
+Error messages from the errorlog table
 
 Installation guide
 
