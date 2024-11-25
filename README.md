@@ -21,25 +21,21 @@ To enhance our software and better understand user needs, practicle will regular
 
 Your informations provided in this installer will be registered. Please keep user information anonymous if you prefer that. No further personal or sensitive information is collected, transmitted or registered.
 
-A Personal Note:
-I have realized that this project is too large for one person to handle alone. Therefore:
+A Personal Note: I have realized that this project is too large for one person to handle alone. Therefore:
 
-Looking for Collaborators
-If you're interested in contributing to this project, partnering up, or reporting security issues, please don’t hesitate to contact me.
+Looking for Collaborators: If you're interested in contributing to this project, partnering up, or reporting security issues, please don’t hesitate to contact me.
 
-Show Your Support
-If you use Practicle regularly, I’d greatly appreciate a recommendation on LinkedIn or Facebook.
+Show Your Support: If you use Practicle regularly, I’d greatly appreciate a recommendation on LinkedIn or Facebook.
 
-Hobby Project Warning
-Practicle is a hobby project and may gain commercial traction in the future. Please use it at your own risk. We recommend running this software on a local network.
+Hobby Project Warning: Practicle is a hobby project and may gain commercial traction in the future. Please use it at your own risk. We recommend running this software on a local network.
 
-Bug Reports and Feature Requests
-If you encounter a bug or have a feature request, please contact me through the contact form on www.practicle.dk or email me at claus@practicle.dk. Include if possible:
+Bug Reports and Feature Requests: If you encounter a bug or have a feature request, please contact me through the contact form on www.practicle.dk or email me at claus@practicle.dk. Include if possible:
 
 - Screenshots of the error
 - Error messages from the errorlog table
 
 Installation guide
+
 This installation guide is designed for installation on its own dedicated server so please dont install on a shared server.
 
 1. install Ubuntu 24.04 (installation script will install all necessary requirements
