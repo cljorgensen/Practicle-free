@@ -151,7 +151,7 @@
 										<?php
 										$TeamLeader = $row['TeamLeader'];
 										if (!empty($TeamLeader)) {
-											$TeamLeader = getUserFullNameWithUsername($TeamLeader);
+											$TeamLeader = $functions->getUserFullNameWithUsername($TeamLeader);
 										} else {
 											$TeamLeader = "";
 										}
@@ -212,7 +212,7 @@
 											<?php
 											$Manager = $row['RelatedManager'];
 											if (!empty($Manager)) {
-												$Manager = getUserFullNameWithUsername($Manager);
+												$Manager = $functions->getUserFullNameWithUsername($Manager);
 											} else {
 												$Manager = "";
 											}

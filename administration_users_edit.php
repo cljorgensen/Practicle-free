@@ -176,7 +176,7 @@ while ($row = mysqli_fetch_array($result)) {
                                         $result = mysqli_query($conn, $sql) or die('Query fail: ' . mysqli_error($conn));
                                         while ($row = mysqli_fetch_array($result)) {
                                             $ManagerID = $row['ID'];
-                                            $UserFullName = getUserFullNameWithUsername($ManagerID);
+                                            $UserFullName = $functions->getUserFullNameWithUsername($ManagerID);
                                             if ($RelatedManager == $ManagerID) {
                                                 echo "<option value='$ManagerID' selected='select'>$UserFullName</option>";
                                             } else {

@@ -6978,7 +6978,7 @@ if (isset($_GET['updateAndLogUserManager'])) {
   $LogActionText = "";
 
   if($UserManager){
-    $ManagerFullName = getUserFullNameWithUsername($UserManager);
+    $ManagerFullName = $functions->getUserFullNameWithUsername($UserManager);
     $LogActionText = "Manager changed to: $ManagerFullName";
   } else{
     $ManagerFullName = "ingen";
@@ -16437,7 +16437,7 @@ if (isset($_GET['getTeamMembers'])) {
         $TempUserID = $row['UserID'];
         $Email = getUserEmailFromID($TempUserID);
         $SessionUserID = $_SESSION['id'];
-        $UserFullName = getUserFullNameWithUsername($TempUserID);
+        $UserFullName = $functions->getUserFullNameWithUsername($TempUserID);
         $ProfilePicture = getUserProfilePicture($TempUserID);
 
         $NewUsername = "<a href=\"javascript:runModalViewUnit('User',$TempUserID);\" data-bs-toggle='popover' data-bs-html='true' data-bs-trigger='hover' data-bs-content='
@@ -16488,7 +16488,7 @@ if (isset($_GET['getActiveApiKeys'])) {
         $company_id = $row['company_id'];
         $company_name = getCompanyName($company_id);
         $created_by = $row['created_by'];
-        $CreatedByUserName = getUserFullNameWithUsername($created_by);
+        $CreatedByUserName = $functions->getUserFullNameWithUsername($created_by);
         $expiry_date = $functions->convertToDanishDateTimeFormat($row['expiry_date']);
         $status = $row['status'];
         $created = $functions->convertToDanishDateTimeFormat($row['created']);
@@ -17076,7 +17076,7 @@ if (isset($_GET['getUsersTable'])) {
             $TypeName = $row['UserType'];
             $Companyname = $row['Companyname'];
             $Email = $row['Email'];
-            $RelatedManager = !empty($row['RelatedManager']) ? getUserFullNameWithUsername($row['RelatedManager']) : "";
+            $RelatedManager = !empty($row['RelatedManager']) ? $functions->getUserFullNameWithUsername($row['RelatedManager']) : "";
             $LastLogon = !empty($row['LastLogon']) ? convertToDanishTimeFormat($row['LastLogon']) : "";
 
             $Status = $row['Active'] == "1" ? $functions->translate("Active") : $functions->translate("Inactive");
