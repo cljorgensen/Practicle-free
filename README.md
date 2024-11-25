@@ -8,7 +8,7 @@ Read this first
 
 This software is provided free of charge and without built in limitations. You are not allowed to sell this software, modify it, or misuse it in any way. Use of this software is at your own discretion, and Practicle is not liable for any data loss or errors arising from its use. We do not have or provide any support for this free version.
 
-To enhance our software and better understand user needs, practicle will regularly transmit the following statistics:
+To enhance the software and better understand user needs, practicle will regularly transmit the following statistics:
 
 - Number of active users
 - Number of active companies
@@ -27,7 +27,7 @@ Looking for Collaborators: If you're interested in contributing to this project,
 
 Show Your Support: If you use Practicle regularly, I’d greatly appreciate a recommendation on LinkedIn or Facebook.
 
-Hobby Project Warning: Practicle is a hobby project and may gain commercial traction in the future. Please use it at your own risk. We recommend running this software on a local network.
+Hobby Project Warning: Practicle is a hobby project and may gain commercial traction in the future. Please use it at your own risk. I recommend running this software on a local network.
 
 Bug Reports and Feature Requests: If you encounter a bug or have a feature request, please contact me through the contact form on www.practicle.dk or email me at claus@practicle.dk. Include if possible:
 
